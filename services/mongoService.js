@@ -1,6 +1,8 @@
 const { MongoClient } = require('mongodb');
 
-const connectionString = 'mongodb+srv://jrd_db_user:dangel@cluster0.r7tnoun.mongodb.net/';
+const connectionString = process.env.MONGO_URI;
+const dbName = process.env.DB_NAME || "test";
+const collectionName = process.env.COLLECTION_NAME || "users";
 const client = new MongoClient(connectionString);
 
 let db;
@@ -9,11 +11,10 @@ async function connectDB() {
     try {
         await client.connect();
 
-        db = client.db("test");
+        db = client.db(dbName);
         console.log("Successfully Connected to DB!");
 
         // Check if neccessary collections exist, create if they don't
-        const collectionName = "users";
         const collections = await db.listCollections({ name: collectionName }).toArray();
         if (collections.length === 0) {
             await db.createCollection(collectionName);

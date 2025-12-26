@@ -1,11 +1,12 @@
+require('dotenv').config();
 const express = require('express');
 const { connectDB, getDb } = require('./services/mongoService');
 const { ObjectId, ReturnDocument } = require('mongodb');
 const axios = require('axios');
 
-const collectionName = 'users';
+const collectionName = process.env.COLLECTION_NAME || 'users';
 const route = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 async function syncData() {
     try {
